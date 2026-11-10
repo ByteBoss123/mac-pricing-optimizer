@@ -56,8 +56,25 @@ jobs:
       - name: Vertex AI training job
         if: ${{ inputs.train_on_vertex }}
         run: |
-          gcloud ai custom-jobs create --region ${{ vars.GCP_REGION }} \
-            --display-name "cost-risk-train-${GITHUB_SHA::7}" \
-            --worker-pool-spec "machine-type=n1-standard-4,replica-count=1,container-image-uri=$IMAGE:${GITHUB_SHA::12}" \
-            --args="python,-m,macopt.train" \
-            --base-output-dir "gs://${{ vars.GCP_BUCKET }}/cost-risk/${GITHUB_SHA::7}"
+          cat > job.yaml <<EOF
+          workerPoolSpecs:
+            - machineSpec:
+                machineType: n1-standard-4
+              replicaCount: 1
+              containerSpec:
+                imageUri: $IMAGE:${GITHUB_SHA::12}
+                command: [python, -m, macopt.train]
+          baseOutputDirectory:
+            outputUriPrefix: gs://${{ vars.GCP_BUCKET }}/cost-risk/${GITHUB_SHA::7}
+          EOF
+          JOB=$(gcloud ai custom-jobs create --region ${{ vars.GCP_REGION }} \
+            --display-name "cost-risk-train-${GITHUB_SHA::7}" --config job.yaml --format 'value(name)')
+          echo "Submitted $JOB"
+          for _ in $(seq 1 90); do
+            STATE=$(gcloud ai custom-jobs describe "$JOB" --region ${{ vars.GCP_REGION }} --format 'value(state)')
+            echo "$STATE"
+            case "$STATE" in JOB_STATE_SUCCEEDED) break;; JOB_STATE_FAILED|JOB_STATE_CANCELLED) exit 1;; esac
+            sleep 20
+          done
+          [ "$STATE" = JOB_STATE_SUCCEEDED ]
+          gcloud storage cat "gs://${{ vars.GCP_BUCKET }}/cost-risk/${GITHUB_SHA::7}/model/cost_risk_meta.json"
