@@ -47,7 +47,9 @@ jobs:
       - name: Smoke test
         run: |
           URL=$(gcloud run services describe "$SERVICE" --region ${{ vars.GCP_REGION }} --format 'value(status.url)')
-          TOKEN=$(gcloud auth print-identity-token --audiences "$URL")
+          # federated (keyless) creds cannot mint ID tokens directly; impersonate the deploy SA
+          TOKEN=$(gcloud auth print-identity-token --impersonate-service-account "${{ vars.GCP_SA_EMAIL }}" \
+            --audiences "$URL" --include-email)
           curl -fsS -H "Authorization: Bearer $TOKEN" "$URL/health"
           curl -fsS -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
             -d '{"guarantee":0.2,"mode":"mip","top_n":3}' "$URL/optimize"
