@@ -1,0 +1,23 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: sha256sum -c leaderboard.csv.sha256
+        working-directory: data/raw
+      - run: python -m pytest -q
+        env:
+          PYTHONPATH: src
+      - run: python -m macopt.run
+        env:
+          PYTHONPATH: src
+      - uses: actions/upload-artifact@v4
+        with:
+          name: outputs
+          path: outputs/

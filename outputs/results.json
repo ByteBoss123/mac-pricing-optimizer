@@ -1,0 +1,213 @@
+{
+  "data_audit": {
+    "raw_rows": 2062,
+    "rows_with_nadac_and_partd": 1151,
+    "molecules": 351,
+    "dropped_mixed_unit_types": 51,
+    "dropped_ratio_outliers": 3,
+    "dropped_ratio_outlier_names": [
+      "Ethacrynic Acid 25mg Tablet",
+      "Isoniazid 300mg Tablet",
+      "Teriflunomide 14mg Tablet"
+    ],
+    "heterogeneous_molecules": 46,
+    "heterogeneous_underwater": 4,
+    "molecules_used": 297,
+    "mix_from_medicaid": 295,
+    "baseline_spend_usd": 12731929929.019997,
+    "baseline_below_nadac_mix": 34
+  },
+  "base_policy": {
+    "guarantee": 0.2,
+    "floor_markup": 0.0,
+    "max_cut": 0.6,
+    "floor_col": "nadac_mix",
+    "raise_underwater": true
+  },
+  "max_feasible_guarantee": {
+    "max_cut_0.30": 0.2782138570121184,
+    "max_cut_0.40": 0.36912971459496235,
+    "max_cut_0.50": 0.45470462016404267,
+    "max_cut_0.60": 0.5341008250772552,
+    "max_cut_0.80": 0.6385175531613896,
+    "max_cut_1.00": 0.6618566700733357
+  },
+  "uniform_cut": {
+    "molecules_below_floor": 56,
+    "spend_below_floor_usd": 488897795.33,
+    "pharmacy_shortfall_usd": 211552193.9472887
+  },
+  "minimax_lp": {
+    "feasible": true,
+    "max_cut": 0.2173579440631067,
+    "guarantee_dual_per_usd": 8.219894078346781e-11,
+    "max_cut_per_guarantee_point": 0.01046551154294776,
+    "molecules_at_floor": 61,
+    "molecules_raised": 34,
+    "new_spend_usd": 10185543943.215994
+  },
+  "min_touch_mip": {
+    "feasible": true,
+    "optimal": true,
+    "mip_gap": 0.0,
+    "repriced": 46,
+    "repriced_forced_raise": 34,
+    "repriced_spend_share": 0.3851058193459131,
+    "largest_cut": 0.6000000000000001,
+    "new_spend_usd": 10091099103.871096,
+    "num_vars": 594,
+    "num_constrs": 926
+  },
+  "dual_check": {
+    "forecast_max_cut": 0.22782345560605446,
+    "resolved_max_cut": 0.2278369226540487
+  },
+  "infeasible_example": {
+    "status": 3,
+    "feasible": false,
+    "iis_guarantee": true,
+    "iis_bound_vars": 297
+  },
+  "sweep_all_mip_optimal": true,
+  "floor_sensitivity": {
+    "floor_nadac_mix": {
+      "max_feasible_guarantee": 0.5341008250772552,
+      "lp_max_cut": 0.2173579440631067,
+      "mip_repriced": 46,
+      "mip_forced_raise": 34,
+      "uniform_below_floor": 56
+    },
+    "floor_nadac_max": {
+      "max_feasible_guarantee": -3.437229902856921,
+      "lp_max_cut": null,
+      "mip_repriced": null,
+      "mip_forced_raise": null,
+      "uniform_below_floor": 112
+    },
+    "floor_nadac_mix_plus_10pct": {
+      "max_feasible_guarantee": 0.5160605863915375,
+      "lp_max_cut": 0.22353149520597565,
+      "mip_repriced": 56,
+      "mip_forced_raise": 44,
+      "uniform_below_floor": 71
+    },
+    "no_underwater_raise": {
+      "max_feasible_guarantee": 0.5451061337461937,
+      "lp_max_cut": 0.20584642118685456,
+      "mip_repriced": 11,
+      "mip_forced_raise": 0,
+      "uniform_below_floor": 56
+    }
+  },
+  "homogeneous_only": {
+    "molecules": 251,
+    "baseline_spend_usd": 9712508070.889997,
+    "underwater": 30,
+    "uniform_below_floor": 48,
+    "lp_max_cut": 0.20528711839060282,
+    "mip_repriced": 38,
+    "mip_forced_raise": 30,
+    "mip_optimal": true,
+    "max_feasible_guarantee": 0.5521820796921083,
+    "max_feasible_guarantee_nadac_max_floor": 0.4683203988536695
+  },
+  "mip_discretionary_cuts": [
+    {
+      "name": "Atorvastatin",
+      "baseline": 0.1422860776485948,
+      "nadac_mix": 0.03692577982505928,
+      "mip_price": 0.05691443105943792,
+      "mip_change_pct": -0.6000000000000001,
+      "mip_savings_usd": 453892547.304
+    },
+    {
+      "name": "Abiraterone Acetate",
+      "baseline": 17.335030191233745,
+      "nadac_mix": 1.261999431733434,
+      "mip_price": 6.934012076493499,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 415737784.53599995
+    },
+    {
+      "name": "Metoprolol Tartrate",
+      "baseline": 0.1789367669977155,
+      "nadac_mix": 0.04690047761852539,
+      "mip_price": 0.0715747067990862,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 273582649.7759999
+    },
+    {
+      "name": "Rosuvastatin",
+      "baseline": 0.186075348497376,
+      "nadac_mix": 0.04560613112783242,
+      "mip_price": 0.0744301393989504,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 261959932.67999998
+    },
+    {
+      "name": "Omeprazole Magnesium Delayed Release (DR)",
+      "baseline": 0.1695075440459978,
+      "nadac_mix": 0.03336946019195032,
+      "mip_price": 0.06780301761839912,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 220043006.53200004
+    },
+    {
+      "name": "Losartan",
+      "baseline": 0.123730363973978,
+      "nadac_mix": 0.03339493319482883,
+      "mip_price": 0.04949214558959121,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 213101511.17999986
+    },
+    {
+      "name": "Amlodipine",
+      "baseline": 0.084052499404799,
+      "nadac_mix": 0.012646672648308207,
+      "mip_price": 0.0336209997619196,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 189413462.7119999
+    },
+    {
+      "name": "Tamsulosin",
+      "baseline": 0.1785254479997322,
+      "nadac_mix": 0.04945,
+      "mip_price": 0.07141017919989288,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 185032245.89999992
+    },
+    {
+      "name": "Duloxetine Delayed Release (DR)",
+      "baseline": 0.3375621148332808,
+      "nadac_mix": 0.1390315269425903,
+      "mip_price": 0.1390315269425903,
+      "mip_change_pct": -0.5881305370679502,
+      "mip_savings_usd": 181631538.6490585
+    },
+    {
+      "name": "Lisinopril",
+      "baseline": 0.0882451077066323,
+      "nadac_mix": 0.026329122924831756,
+      "mip_price": 0.03529804308265292,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 151724130.846
+    },
+    {
+      "name": "Ezetimibe",
+      "baseline": 0.3211513020023204,
+      "nadac_mix": 0.0691,
+      "mip_price": 0.12846052080092815,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 125238691.91999999
+    },
+    {
+      "name": "Lurasidone HCl",
+      "baseline": 6.235294293855615,
+      "nadac_mix": 0.25566403310849856,
+      "mip_price": 2.494117717542246,
+      "mip_change_pct": -0.6,
+      "mip_savings_usd": 109592141.93399999
+    }
+  ],
+  "underwater_raise_cost_usd": 140118818.82015875
+}
