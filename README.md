@@ -101,7 +101,10 @@ A rate set at today's NADAC goes underwater if acquisition cost rises after the 
 * **GCP setup** (`deploy/setup_gcp.sh`): enables the APIs and creates the Artifact Registry repo, model bucket, deploy service account and Workload Identity Federation for this GitHub repo.
 * **Local workflow:** VS Code workspace settings, debug configurations for the optimizer, trainer and API, ruff, and pre-commit hooks.
 
-**Verification status.** Tests, lint, workflow lint (actionlint), shell lint (shellcheck) and the live local API all pass in the build environment. The Docker image build, GitHub Actions runs, Cloud Run deployment and Vertex AI job have not run yet. Container registries were blocked from the build environment, and they need the owner's GCP project. See [Deploy](#deploy).
+**Verification status (2026-11-10).** All verified on real infrastructure in the owner's GCP project:
+* GitHub Actions CI passes on every push: lint, checksums, 14 tests, optimizer re-run.
+* The deploy workflow built the image, pushed it to Artifact Registry and deployed it to Cloud Run. Its authenticated smoke test against the live service returned the offline result (46 molecules re-priced at a 20% guarantee).
+* A Vertex AI custom training job (`customJobs/9206255192020877312`, n1-standard-4, us-central1) retrained the cost-spike model from the same image and wrote it to Cloud Storage, reproducing the local test ROC-AUC (0.8917) and PR-AUC (0.4363).
 
 ## Run locally
 
