@@ -57,7 +57,7 @@ def main() -> dict:
         dest = Path("/gcs") / gcs.removeprefix("gs://")
         dest.mkdir(parents=True, exist_ok=True)
         for f in ("cost_risk_lgbm.txt", "cost_risk_meta.json"):
-            shutil.copy(mdir / f, dest / f)
+            shutil.copyfile(mdir / f, dest / f)  # FUSE mount rejects chmod
         res["vertex_model_dir"] = gcs
 
     out = ROOT / "outputs"
