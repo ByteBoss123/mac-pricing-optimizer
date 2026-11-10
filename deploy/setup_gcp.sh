@@ -37,6 +37,10 @@ for role in roles/run.admin roles/artifactregistry.writer roles/iam.serviceAccou
     --role "$role" --condition=None >/dev/null
 done
 
+# lets CI mint an ID token as this SA for the authenticated Cloud Run smoke test
+gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" --member "serviceAccount:$SA_EMAIL" \
+  --role roles/iam.serviceAccountTokenCreator >/dev/null
+
 gcloud iam workload-identity-pools describe "$POOL" --location global >/dev/null 2>&1 || \
   gcloud iam workload-identity-pools create "$POOL" --location global --display-name "GitHub"
 
