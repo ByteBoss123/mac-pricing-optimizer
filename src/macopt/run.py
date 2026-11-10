@@ -2,27 +2,29 @@
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import replace
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from macopt.data import load_molecules
-from macopt.model import (Policy, max_feasible_guarantee, policy_dict,
-                          solve_min_touch, solve_minimax, uniform_cut)
+from macopt.model import (
+    Policy,
+    max_feasible_guarantee,
+    policy_dict,
+    solve_min_touch,
+    solve_minimax,
+    uniform_cut,
+)
 
 OUT = Path(__file__).resolve().parents[2] / "outputs"
 GUARANTEES = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
 MAX_CUTS = [0.30, 0.40, 0.50, 0.60, 0.80]
 
-
-def molecule_name(term: str) -> str:
-    return re.split(r"\s\d", term, maxsplit=1)[0].strip()
 
 
 def strip(r: dict) -> dict:
@@ -32,7 +34,6 @@ def strip(r: dict) -> dict:
 def main() -> dict:
     OUT.mkdir(exist_ok=True)
     mol, audit = load_molecules()
-    mol["name"] = mol.molecule.map(molecule_name)
     base = Policy()
     res: dict = {"data_audit": audit, "base_policy": policy_dict(base)}
 

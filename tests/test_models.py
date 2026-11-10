@@ -5,8 +5,7 @@ import pandas as pd
 import pytest
 
 from macopt.data import load_molecules
-from macopt.model import (Policy, bounds, max_feasible_guarantee,
-                          solve_min_touch, solve_minimax, uniform_cut)
+from macopt.model import Policy, bounds, max_feasible_guarantee, solve_min_touch, solve_minimax, uniform_cut
 
 
 @pytest.fixture(scope="module")

@@ -1,0 +1,21 @@
+{
+  "features": [
+    "r4",
+    "r13",
+    "r26",
+    "r52",
+    "vol52",
+    "n_chg52",
+    "wks_since_chg",
+    "log_price",
+    "sib_r13",
+    "lab_r13",
+    "lab_up_share13",
+    "mkt_r13"
+  ],
+  "spike": 0.1,
+  "horizon_weeks": 13,
+  "trained_on_examples": 863504,
+  "test_roc_auc": 0.8917069443625321,
+  "test_pr_auc": 0.4363038972916617
+}

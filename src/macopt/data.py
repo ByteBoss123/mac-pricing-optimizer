@@ -15,9 +15,9 @@ Per-strength NADAC values are collapsed two ways:
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 RAW = Path(__file__).resolve().parents[2] / "data" / "raw" / "leaderboard.csv"
@@ -32,6 +32,11 @@ RATIO_BAND = (0.5, 50.0)
 # formulations (e.g. carvedilol ER capsules into carvedilol). A molecule whose
 # strength-level NADAC spans more than this ratio is flagged as heterogeneous.
 HETERO_SPREAD = 5.0
+
+
+def molecule_name(term: str) -> str:
+    """'Atorvastatin 80mg Tablet' -> 'Atorvastatin' (rates apply to all strengths)."""
+    return re.split(r"\s\d", term, maxsplit=1)[0].strip()
 
 
 def load_molecules(path: Path = RAW, homogeneous_only: bool = False) -> tuple[pd.DataFrame, dict]:
@@ -84,6 +89,7 @@ def load_molecules(path: Path = RAW, homogeneous_only: bool = False) -> tuple[pd
     if homogeneous_only:
         mol = mol[~mol.heterogeneous].copy()
 
+    mol["name"] = mol.molecule.map(molecule_name)
     mol["spend"] = mol.baseline * mol.volume
     mol = mol.sort_values("spend", ascending=False).reset_index(drop=True)
     audit["molecules_used"] = len(mol)

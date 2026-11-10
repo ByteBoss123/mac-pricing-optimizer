@@ -1,0 +1,133 @@
+{
+  "train_rows": 421737,
+  "test_rows": 267648,
+  "train_ndcs": 43025,
+  "test_ndcs": 45146,
+  "train_origins": 10,
+  "test_origins": 6,
+  "train_base_rate": 0.09636574452798782,
+  "test_base_rate": 0.08829133787661406,
+  "momentum_rule": {
+    "roc_auc": 0.2883351202846798,
+    "pr_auc": 0.07251551965926056,
+    "precision_top10pct": 0.10349723509191451
+  },
+  "logistic": {
+    "roc_auc": 0.8873826569897688,
+    "pr_auc": 0.42556752817216165,
+    "precision_top10pct": 0.4337916604393962
+  },
+  "lightgbm": {
+    "roc_auc": 0.8917069443625321,
+    "pr_auc": 0.4363038972916617,
+    "precision_top10pct": 0.4382752951726199
+  },
+  "lightgbm_gain_share": {
+    "vol52": 0.404,
+    "r4": 0.143,
+    "r13": 0.1192,
+    "wks_since_chg": 0.0788,
+    "log_price": 0.0666,
+    "r52": 0.0527,
+    "r26": 0.0516,
+    "sib_r13": 0.0398,
+    "n_chg52": 0.0216,
+    "mkt_r13": 0.0169,
+    "lab_r13": 0.0032,
+    "lab_up_share13": 0.0025
+  },
+  "calibration_by_decile": {
+    "0": {
+      "predicted": 0.0003,
+      "actual": 0.0005
+    },
+    "1": {
+      "predicted": 0.0007,
+      "actual": 0.0004
+    },
+    "2": {
+      "predicted": 0.0009,
+      "actual": 0.0002
+    },
+    "3": {
+      "predicted": 0.0011,
+      "actual": 0.0011
+    },
+    "4": {
+      "predicted": 0.002,
+      "actual": 0.0026
+    },
+    "5": {
+      "predicted": 0.02,
+      "actual": 0.0493
+    },
+    "6": {
+      "predicted": 0.0505,
+      "actual": 0.0745
+    },
+    "7": {
+      "predicted": 0.1042,
+      "actual": 0.1122
+    },
+    "8": {
+      "predicted": 0.2305,
+      "actual": 0.2038
+    },
+    "9": {
+      "predicted": 0.5532,
+      "actual": 0.4383
+    }
+  },
+  "panel_rows": 6461819,
+  "panel_ndcs": 48576,
+  "examples": 863504,
+  "buffer_backtest": [
+    {
+      "avg_buffer": 0.02,
+      "n": 267648,
+      "flat_breach_rate": 0.22878556910569106,
+      "risk_breach_rate": 0.2071265243902439,
+      "relative_reduction": 0.09466962798445311,
+      "mean_buffer_risk": 0.020000000000000004,
+      "share_near_zero_buffer": 0.5636806551889049
+    },
+    {
+      "avg_buffer": 0.05,
+      "n": 267648,
+      "flat_breach_rate": 0.15750164395026303,
+      "risk_breach_rate": 0.12311692969870876,
+      "relative_reduction": 0.21831336733483564,
+      "mean_buffer_risk": 0.05,
+      "share_near_zero_buffer": 0.5156100549976088
+    },
+    {
+      "avg_buffer": 0.1,
+      "n": 267648,
+      "flat_breach_rate": 0.08829133787661406,
+      "risk_breach_rate": 0.054986400047824006,
+      "relative_reduction": 0.3772163683297364,
+      "mean_buffer_risk": 0.1,
+      "share_near_zero_buffer": 0.49424243782879007
+    }
+  ],
+  "config": {
+    "spike": 0.1,
+    "horizon_weeks": 13,
+    "train_end": "2021-09-29",
+    "test_start": "2022-01-05",
+    "features": [
+      "r4",
+      "r13",
+      "r26",
+      "r52",
+      "vol52",
+      "n_chg52",
+      "wks_since_chg",
+      "log_price",
+      "sib_r13",
+      "lab_r13",
+      "lab_up_share13",
+      "mkt_r13"
+    ]
+  }
+}

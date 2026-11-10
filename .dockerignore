@@ -1,0 +1,7 @@
+.git
+__pycache__
+.pytest_cache
+.vscode
+tests
+outputs
+*.zip

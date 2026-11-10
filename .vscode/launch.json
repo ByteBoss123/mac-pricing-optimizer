@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "Optimizer scenarios", "type": "debugpy", "request": "launch", "module": "macopt.run",
+     "env": {"PYTHONPATH": "${workspaceFolder}/src"}},
+    {"name": "Train cost-risk model", "type": "debugpy", "request": "launch", "module": "macopt.train",
+     "env": {"PYTHONPATH": "${workspaceFolder}/src"}},
+    {"name": "API (uvicorn)", "type": "debugpy", "request": "launch", "module": "uvicorn",
+     "args": ["macopt.api:app", "--reload", "--port", "8080"], "env": {"PYTHONPATH": "${workspaceFolder}/src"}}
+  ]
+}

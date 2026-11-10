@@ -1,0 +1,61 @@
+name: deploy
+# Runs after CI passes on main: build image -> Artifact Registry -> Cloud Run,
+# then smoke-test the live service. Manual run can also launch Vertex training.
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      train_on_vertex:
+        description: "Also submit a Vertex AI custom training job"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_AR_REPO }}/pricing-api
+  SERVICE: pricing-api
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SA_EMAIL }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Build and push image
+        run: |
+          gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+          docker build -t "$IMAGE:${GITHUB_SHA::12}" -t "$IMAGE:latest" .
+          docker push --all-tags "$IMAGE"
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy "$SERVICE" --image "$IMAGE:${GITHUB_SHA::12}" \
+            --region ${{ vars.GCP_REGION }} --memory 2Gi --cpu 2 --max-instances 2 \
+            --no-allow-unauthenticated --quiet
+      - name: Smoke test
+        run: |
+          URL=$(gcloud run services describe "$SERVICE" --region ${{ vars.GCP_REGION }} --format 'value(status.url)')
+          TOKEN=$(gcloud auth print-identity-token --audiences "$URL")
+          curl -fsS -H "Authorization: Bearer $TOKEN" "$URL/health"
+          curl -fsS -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+            -d '{"guarantee":0.2,"mode":"mip","top_n":3}' "$URL/optimize"
+      - name: Vertex AI training job
+        if: ${{ inputs.train_on_vertex }}
+        run: |
+          gcloud ai custom-jobs create --region ${{ vars.GCP_REGION }} \
+            --display-name "cost-risk-train-${GITHUB_SHA::7}" \
+            --worker-pool-spec "machine-type=n1-standard-4,replica-count=1,container-image-uri=$IMAGE:${GITHUB_SHA::12}" \
+            --args="python,-m,macopt.train" \
+            --base-output-dir "gs://${{ vars.GCP_BUCKET }}/cost-risk/${GITHUB_SHA::7}"
